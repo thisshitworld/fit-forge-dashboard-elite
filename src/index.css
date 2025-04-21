@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  font-family: Inter, sans-serif;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -88,14 +92,13 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-image: var(--background-gradient, linear-gradient(102.3deg, #93278f 5.9%, #eab0e8 64%, #f6dbf5 89%));
+    min-height: 100vh;
   }
 }
