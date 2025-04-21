@@ -98,16 +98,22 @@ html, body {
     font-family: 'Playfair Display', serif;
   }
 
+  /* Black, white, and blue gradient background */
   body {
-    background-image: var(--background-gradient, linear-gradient(102.3deg, #000000 5.9%, #1E293B 64%, #1E40AF 89%));
+    background-image: linear-gradient(135deg, #000000 0%, #ffffff 40%, #1E40AF 100%);
     min-height: 100vh;
+    color: #fff; /* Light text on dark background */
   }
 }
 
-/* Custom animation classes */
+/* Fixed keyframes with correct CSS syntax */
 @keyframes bounce-up {
-  '0%, 100%': { transform: 'translateY(0)' },
-  '50%': { transform: 'translateY(-8px)' },
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .animate-bounce-up {
@@ -121,3 +127,4 @@ html, body {
 .hover-scale:hover {
   transform: scale(1.05);
 }
+
