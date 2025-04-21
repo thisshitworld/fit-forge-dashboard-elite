@@ -1,4 +1,3 @@
-
 // Main Fitness Dashboard Page
 
 import * as React from "react"
@@ -10,6 +9,7 @@ import { ProgressChart } from "@/components/ProgressChart"
 import { PersonalRecords } from "@/components/PersonalRecords"
 import { fakeWorkouts, Workout } from "@/data/fakeWorkouts"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { weeklySplit } from "@/data/exercises"
 
 const LOCAL_KEY = "ffge-workouts"
 
@@ -79,6 +79,7 @@ const Index = () => {
               </div>
             </div>
           )}
+          {/* Workout Modal now uses muscle group/exercise split logic (handled in modal) */}
           <AddWorkoutModal
             open={addOpen}
             onClose={() => setAddOpen(false)}
