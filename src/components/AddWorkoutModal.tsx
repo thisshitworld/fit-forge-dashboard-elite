@@ -6,15 +6,18 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import * as React from "react"
-import { exercisesByMuscleGroup, muscleGroups, weeklySplit } from "@/data/exercises"
+import { exercisesByMuscleGroup, muscleGroups, getUserSplit } from "@/data/exercises"
 import { format, parseISO } from "date-fns"
 
 export interface AddWorkoutFormValues {
   exercise: string;
   date: string;
-  weight: number;
-  cleanReps: number;
-  supportedReps: number;
+  sets: {
+    set: number;
+    weight: number;
+    cleanReps: number;
+    supportedReps: number;
+  }[];
   notes?: string;
 }
 
@@ -29,13 +32,8 @@ function getDayOfWeek(dateStr: string) {
 
 function suggestedMuscleGroupsForDate(dateISO: string) {
   const day = getDayOfWeek(dateISO)
-  return weeklySplit[day] || []
-}
-
-function exerciseOptions(groups: string[]) {
-  const set = new Set<string>()
-  groups.forEach(g => exercisesByMuscleGroup[g as keyof typeof exercisesByMuscleGroup]?.forEach(e => set.add(e)))
-  return Array.from(set)
+  const split = getUserSplit()
+  return split[day] || []
 }
 
 export function AddWorkoutModal({
@@ -52,9 +50,9 @@ export function AddWorkoutModal({
   const [form, setForm] = React.useState<AddWorkoutFormValues>({
     exercise: "",
     date: defaultDate,
-    weight: 0,
-    cleanReps: 0,
-    supportedReps: 0,
+    sets: [
+      { set: 1, weight: 0, cleanReps: 0, supportedReps: 0 }
+    ],
     notes: "",
   });
 
@@ -64,9 +62,7 @@ export function AddWorkoutModal({
       setForm({
         exercise: "",
         date: defaultDate,
-        weight: 0,
-        cleanReps: 0,
-        supportedReps: 0,
+        sets: [{ set: 1, weight: 0, cleanReps: 0, supportedReps: 0 }],
         notes: "",
       })
     }
@@ -83,6 +79,41 @@ export function AddWorkoutModal({
     group,
     exercises: exercisesByMuscleGroup[group]
   }))
+
+  // Handlers for set input fields
+  const handleSetInput = (
+    idx: number,
+    field: "set" | "weight" | "cleanReps" | "supportedReps",
+    value: string
+  ) => {
+    setForm(prev => ({
+      ...prev,
+      sets: prev.sets.map((setRow, i) =>
+        i === idx ? { ...setRow, [field]: field === "set" ? Number(value) : Number(value) }
+        : setRow
+      )
+    }))
+  }
+
+  const handleAddSet = () => {
+    setForm(prev => ({
+      ...prev,
+      sets: [...prev.sets, {
+        set: prev.sets.length + 1,
+        weight: 0,
+        cleanReps: 0,
+        supportedReps: 0,
+      }]
+    }))
+  }
+
+  const handleRemoveSet = (idx: number) => {
+    setForm(prev => ({
+      ...prev,
+      sets: prev.sets.filter((_, i) => i !== idx)
+        .map((set, i) => ({ ...set, set: i + 1 }))
+    }))
+  }
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -106,8 +137,8 @@ export function AddWorkoutModal({
           <DialogTitle>Add a Workout</DialogTitle>
           <DialogDescription>
             <span>
-              Every rep counts — log your gains!<br />
-              <b>Split for {actualDay}: {dayName}</b><br />
+              <b>Day: {actualDay} ({dayName})</b>
+              <br />
               <span className="text-highlight">
                 {suggestedGroups.join(", ") || "Any muscle group"}
               </span>
@@ -125,7 +156,6 @@ export function AddWorkoutModal({
             className="rounded-md border px-3 py-2"
           >
             <option value="" disabled>Select exercise</option>
-            {/* list suggested groups first */}
             {allExerciseOptions.map(({ group, exercises }) => (
               <optgroup key={group} label={group + (suggestedGroups.includes(group) ? " (Today)" : "")}>
                 {exercises.map(ex => (
@@ -134,7 +164,6 @@ export function AddWorkoutModal({
               </optgroup>
             ))}
           </select>
-
           <label className="text-sm font-semibold">Date</label>
           <Input
             name="date"
@@ -143,13 +172,62 @@ export function AddWorkoutModal({
             onChange={handleInput}
             required
           />
-          <div className="text-xs text-muted-foreground mb-2">
-            Day: <b>{dayName}</b>
-          </div>
-          <div className="flex gap-2">
-            <Input name="weight" type="number" min={0} placeholder="Weight (kg)" value={form.weight} onChange={handleInput} required />
-            <Input name="cleanReps" type="number" min={0} placeholder="Clean reps" value={form.cleanReps} onChange={handleInput} required />
-            <Input name="supportedReps" type="number" min={0} placeholder="Supported reps" value={form.supportedReps} onChange={handleInput} required />
+          <div className="flex flex-col gap-2 mb-2 p-2 rounded bg-gray-100 border">
+            <div className="font-semibold text-base">Sets</div>
+            {form.sets.map((setRow, idx) => (
+              <div key={idx} className="flex gap-2 items-center">
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Set"
+                  value={setRow.set || ""}
+                  onChange={e => handleSetInput(idx, "set", e.target.value)}
+                  className="w-14"
+                />
+                <Input
+                  type="number"
+                  min={0}
+                  placeholder="Clean Rep"
+                  value={setRow.cleanReps || ""}
+                  onChange={e => handleSetInput(idx, "cleanReps", e.target.value)}
+                  className="w-24"
+                />
+                <Input
+                  type="number"
+                  min={0}
+                  placeholder="With Support"
+                  value={setRow.supportedReps || ""}
+                  onChange={e => handleSetInput(idx, "supportedReps", e.target.value)}
+                  className="w-28"
+                />
+                <Input
+                  type="number"
+                  min={0}
+                  placeholder="Weight"
+                  value={setRow.weight || ""}
+                  onChange={e => handleSetInput(idx, "weight", e.target.value)}
+                  className="w-20"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="text-gray-500 hover:text-red-600 px-1"
+                  onClick={() => handleRemoveSet(idx)}
+                  disabled={form.sets.length === 1}
+                  title="Remove set"
+                >
+                  ×
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={handleAddSet}
+              size="sm"
+              className="w-fit px-3 mt-1 bg-neutral-700 hover:bg-neutral-800 text-white"
+            >
+              + Add Set
+            </Button>
           </div>
           <Input name="notes" placeholder="Notes (optional)" value={form.notes} onChange={handleInput} />
           <DialogFooter className="flex justify-end gap-2 mt-2">
