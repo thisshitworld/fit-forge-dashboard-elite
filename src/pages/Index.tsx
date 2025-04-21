@@ -52,11 +52,21 @@ const Index = () => {
     setWorkouts(all.filter(w => w.date === date))
   }, [date])
 
-  // Personal Split Save
+  // Personal Split Save - fixed type handling
   const handleSaveSplit = (newSplit: Record<string, string[]>) => {
-    setSplit(newSplit)
-    // Type assertion since we know the values will be valid muscle groups from the selection
-    setUserSplit(newSplit as Record<string, typeof muscleGroups[number][]>)
+    // Convert to the correct type for state update
+    const typedSplit: Record<string, typeof muscleGroups[number][]> = {}
+    
+    // Filter values to ensure they're valid muscle groups
+    Object.entries(newSplit).forEach(([day, muscles]) => {
+      typedSplit[day] = muscles.filter(
+        (m): m is typeof muscleGroups[number] => 
+        muscleGroups.includes(m as any)
+      )
+    })
+    
+    setSplit(typedSplit)
+    setUserSplit(typedSplit)
     setSplitEditing(false)
   }
 
