@@ -2,7 +2,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.50706edffee74973b3931c91d7e50bb8',
+  appId: 'com.lovable.fitforge',
   appName: 'fit-forge-dashboard-elite',
   webDir: 'dist',
   server: {
