@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,7 +18,7 @@ html, body {
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -42,7 +43,7 @@ html, body {
 
     --sidebar-foreground: 240 5.3% 26.1%;
 
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 221.2 83.2% 53.3%;
 
     --sidebar-primary-foreground: 0 0% 98%;
 
@@ -65,7 +66,7 @@ html, body {
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -98,7 +99,25 @@ html, body {
   }
 
   body {
-    background-image: var(--background-gradient, linear-gradient(102.3deg, #93278f 5.9%, #eab0e8 64%, #f6dbf5 89%));
+    background-image: var(--background-gradient, linear-gradient(102.3deg, #000000 5.9%, #1E293B 64%, #1E40AF 89%));
     min-height: 100vh;
   }
+}
+
+/* Custom animation classes */
+@keyframes bounce-up {
+  '0%, 100%': { transform: 'translateY(0)' },
+  '50%': { transform: 'translateY(-8px)' },
+}
+
+.animate-bounce-up {
+  animation: bounce-up 0.8s ease infinite;
+}
+
+.hover-scale {
+  transition: transform 0.2s;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
 }

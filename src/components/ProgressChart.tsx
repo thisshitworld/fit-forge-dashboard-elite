@@ -11,17 +11,31 @@ export function ProgressChart({ data }: { data: Workout[] }) {
 
   const chartData = data
     .filter(w => w.exercise === exercise)
-    .map(w => ({
-      date: w.date,
-      "Clean": w.cleanReps,
-      "With Support": w.supportedReps,
-      "Weight": w.weight,
-    }))
+    .map(w => {
+      // Get average values from sets
+      const totalSets = w.sets?.length || 0
+      const avgCleanReps = totalSets > 0 
+        ? w.sets.reduce((sum, set) => sum + set.cleanReps, 0) / totalSets 
+        : 0
+      const avgSupportedReps = totalSets > 0 
+        ? w.sets.reduce((sum, set) => sum + set.supportedReps, 0) / totalSets 
+        : 0
+      const maxWeight = totalSets > 0 
+        ? Math.max(...w.sets.map(set => set.weight)) 
+        : 0
+        
+      return {
+        date: w.date,
+        "Clean": avgCleanReps,
+        "With Support": avgSupportedReps,
+        "Weight": maxWeight,
+      }
+    })
 
   return (
     <div id="progress-charts" className="bg-card rounded-xl shadow-lg p-5 mb-8">
-      <h2 className="font-playfair text-2xl text-highlight mb-4 flex items-center gap-2">
-        <Dumbbell className="text-primary" /> Progress Chart
+      <h2 className="font-playfair text-2xl text-blue-500 mb-4 flex items-center gap-2">
+        <Dumbbell className="text-blue-600" /> Progress Chart
       </h2>
       <div className="flex items-center gap-2 mb-3">
         <label htmlFor="exercise-picker" className="text-muted-foreground">Exercise:</label>
@@ -46,9 +60,9 @@ export function ProgressChart({ data }: { data: Workout[] }) {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="Clean" stroke="#6E59A5" strokeWidth={2} />
-            <Line type="monotone" dataKey="With Support" stroke="#8b5cf6" strokeWidth={2} />
-            <Line type="monotone" dataKey="Weight" stroke="#403E43" strokeWidth={2} dot={{ r: 4 }} />
+            <Line type="monotone" dataKey="Clean" stroke="#2563EB" strokeWidth={2} />
+            <Line type="monotone" dataKey="With Support" stroke="#3B82F6" strokeWidth={2} />
+            <Line type="monotone" dataKey="Weight" stroke="#1E3A8A" strokeWidth={2} dot={{ r: 4 }} />
           </LineChart>
         </ResponsiveContainer>
       )}

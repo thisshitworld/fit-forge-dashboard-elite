@@ -10,6 +10,9 @@ export interface Workout {
     supportedReps: number
   }[]
   notes?: string
+  weight?: number // For backward compatibility with components
+  cleanReps?: number // For backward compatibility with components  
+  supportedReps?: number // For backward compatibility with components
 }
 
 export const fakeWorkouts: Workout[] = []

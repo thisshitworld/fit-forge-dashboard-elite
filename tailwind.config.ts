@@ -30,25 +30,25 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#7e69ab', // Soft Purple
+					DEFAULT: '#3B82F6', // Blue
 					foreground: '#fff'
 				},
 				secondary: {
-					DEFAULT: '#f1f0fb',
+					DEFAULT: '#f1f5fb',
 					foreground: '#222'
 				},
 				card: {
 					DEFAULT: '#ffffffcc',
 					foreground: '#222',
 				},
-				highlight: "#8b5cf6",
+				highlight: "#2563EB",
 				accent: {
-					DEFAULT: "#e5deff",
-					foreground: "#8e9196"
+					DEFAULT: "#e5e7fa",
+					foreground: "#4B5563"
 				}
 			},
 			backgroundImage: {
-				'dashboard': 'linear-gradient(102.3deg, #93278f 5.9%, #eab0e8 64%, #f6dbf5 89%)',
+				'dashboard': 'linear-gradient(102.3deg, #000000 5.9%, #1E293B 64%, #1E40AF 89%)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -68,4 +68,3 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

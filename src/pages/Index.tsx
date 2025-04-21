@@ -12,6 +12,7 @@ import { fakeWorkouts, Workout } from "@/data/fakeWorkouts"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { getUserSplit, setUserSplit, muscleGroups } from "@/data/exercises"
 import { format } from "date-fns"
+import { Button } from "@/components/ui/button"
 
 const LOCAL_KEY = "ffge-workouts"
 
@@ -31,7 +32,7 @@ function getTodayISO() {
 
 const Index = () => {
   // Split setup
-  const [split, setSplit] = React.useState<Record<string, string[]>>(getUserSplit())
+  const [split, setSplit] = React.useState(getUserSplit())
   const [splitEditing, setSplitEditing] = React.useState(!split || Object.keys(split).length === 0)
 
   // Always show today's workouts, allow picking date
@@ -54,7 +55,8 @@ const Index = () => {
   // Personal Split Save
   const handleSaveSplit = (newSplit: Record<string, string[]>) => {
     setSplit(newSplit)
-    setUserSplit(newSplit)
+    // Type assertion since we know the values will be valid muscle groups from the selection
+    setUserSplit(newSplit as Record<string, typeof muscleGroups[number][]>)
     setSplitEditing(false)
   }
 
@@ -143,7 +145,7 @@ const Index = () => {
           </div>
         ))}
         <Button
-          className="bg-neutral-900 hover:bg-neutral-800 text-white mt-4"
+          className="bg-blue-900 hover:bg-blue-800 text-white mt-4"
           onClick={() => handleSaveSplit(local)}
         >
           Save Split
@@ -154,7 +156,7 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-dashboard">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-black via-gray-800 to-blue-900">
         <AppSidebar />
         <div className="flex-1 p-4 pt-8 max-w-4xl mx-auto">
           {splitEditing ? <SplitEditBox /> : (
@@ -179,7 +181,7 @@ const Index = () => {
                 <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none animate-fade-in">
                   <div className="bg-white/90 border border-yellow-400 rounded-2xl p-6 shadow-2xl flex flex-col items-center animate-bounce-up">
                     <span className="text-5xl font-playfair text-yellow-400 mt-2 animate-bounce-up">🔥</span>
-                    <span className="font-playfair text-2xl text-primary font-bold">New Personal Record!</span>
+                    <span className="font-playfair text-2xl text-blue-900 font-bold">New Personal Record!</span>
                   </div>
                 </div>
               )}
