@@ -134,15 +134,15 @@ const Index = () => {
   function SplitEditBox() {
     const [local, setLocal] = React.useState<Record<string, string[]>>(split || {})
     return (
-      <div className="p-6 border rounded-2xl bg-white max-w-lg mx-auto mb-10 mt-4">
-        <h2 className="font-playfair text-xl mb-2">Set your weekly split</h2>
+      <div className="p-6 border rounded-2xl bg-white text-black max-w-lg mx-auto mb-10 mt-4 shadow-lg">
+        <h2 className="font-playfair text-xl mb-2 font-bold">Set your weekly split</h2>
         {DAYS.map(day => (
           <div key={day} className="flex items-center gap-3 mb-2">
-            <span className="w-20">{day}</span>
+            <span className="w-20 font-medium">{day}</span>
             <select
               multiple
               value={local[day] || []}
-              className="border rounded px-2 py-1"
+              className="border rounded px-2 py-1 w-full bg-gray-50"
               onChange={e => {
                 const vals = Array.from(e.target.selectedOptions).map(o => o.value)
                 setLocal(s => ({ ...s, [day]: vals }))
@@ -176,13 +176,14 @@ const Index = () => {
                 <div className="ml-auto flex gap-2 items-center">
                   <input
                     type="date"
-                    className="rounded border px-2 py-1"
+                    className="rounded border px-2 py-1 bg-white text-black"
                     value={date}
                     onChange={e => setDate(e.target.value)}
                   />
                   <Button
                     variant="outline"
                     size="sm"
+                    className="bg-white text-blue-900 hover:bg-blue-100 border-blue-900"
                     onClick={() => setSplitEditing(true)}
                   >Edit Split</Button>
                 </div>
