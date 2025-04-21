@@ -132,14 +132,14 @@ export function AddWorkoutModal({
 
   return (
     <Dialog open={open} onOpenChange={v => !v && onClose()}>
-      <DialogContent>
+      <DialogContent className="bg-gray-900 text-white border-gray-700">
         <DialogHeader>
-          <DialogTitle>Add a Workout</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-xl text-white">Add a Workout</DialogTitle>
+          <DialogDescription className="text-gray-200">
             <span>
               <b>Day: {actualDay} ({dayName})</b>
               <br />
-              <span className="text-highlight">
+              <span className="text-yellow-300 font-medium">
                 {suggestedGroups.join(", ") || "Any muscle group"}
               </span>
             </span>
@@ -147,13 +147,13 @@ export function AddWorkoutModal({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-3">
           {/* Exercise selection, grouped */}
-          <label className="text-sm font-semibold">Exercise</label>
+          <label className="text-sm font-semibold text-white">Exercise</label>
           <select
             name="exercise"
             value={form.exercise}
             onChange={handleInput}
             required
-            className="rounded-md border px-3 py-2"
+            className="rounded-md border border-gray-600 px-3 py-2 bg-gray-800 text-white"
           >
             <option value="" disabled>Select exercise</option>
             {allExerciseOptions.map(({ group, exercises }) => (
@@ -164,16 +164,17 @@ export function AddWorkoutModal({
               </optgroup>
             ))}
           </select>
-          <label className="text-sm font-semibold">Date</label>
+          <label className="text-sm font-semibold text-white">Date</label>
           <Input
             name="date"
             type="date"
             value={form.date}
             onChange={handleInput}
             required
+            className="bg-gray-800 text-white border-gray-600"
           />
-          <div className="flex flex-col gap-2 mb-2 p-2 rounded bg-gray-100 border">
-            <div className="font-semibold text-base">Sets</div>
+          <div className="flex flex-col gap-2 mb-2 p-2 rounded bg-gray-800 border border-gray-700">
+            <div className="font-semibold text-base text-white">Sets</div>
             {form.sets.map((setRow, idx) => (
               <div key={idx} className="flex gap-2 items-center">
                 <Input
@@ -182,7 +183,7 @@ export function AddWorkoutModal({
                   placeholder="Set"
                   value={setRow.set || ""}
                   onChange={e => handleSetInput(idx, "set", e.target.value)}
-                  className="w-14"
+                  className="w-14 bg-gray-800 text-white border-gray-600"
                 />
                 <Input
                   type="number"
@@ -190,7 +191,7 @@ export function AddWorkoutModal({
                   placeholder="Clean Rep"
                   value={setRow.cleanReps || ""}
                   onChange={e => handleSetInput(idx, "cleanReps", e.target.value)}
-                  className="w-24"
+                  className="w-24 bg-gray-800 text-white border-gray-600"
                 />
                 <Input
                   type="number"
@@ -198,7 +199,7 @@ export function AddWorkoutModal({
                   placeholder="With Support"
                   value={setRow.supportedReps || ""}
                   onChange={e => handleSetInput(idx, "supportedReps", e.target.value)}
-                  className="w-28"
+                  className="w-28 bg-gray-800 text-white border-gray-600"
                 />
                 <Input
                   type="number"
@@ -206,12 +207,12 @@ export function AddWorkoutModal({
                   placeholder="Weight"
                   value={setRow.weight || ""}
                   onChange={e => handleSetInput(idx, "weight", e.target.value)}
-                  className="w-20"
+                  className="w-20 bg-gray-800 text-white border-gray-600"
                 />
                 <Button
                   type="button"
                   variant="ghost"
-                  className="text-gray-500 hover:text-red-600 px-1"
+                  className="text-gray-300 hover:text-red-400 px-1"
                   onClick={() => handleRemoveSet(idx)}
                   disabled={form.sets.length === 1}
                   title="Remove set"
@@ -224,17 +225,23 @@ export function AddWorkoutModal({
               type="button"
               onClick={handleAddSet}
               size="sm"
-              className="w-fit px-3 mt-1 bg-neutral-700 hover:bg-neutral-800 text-white"
+              className="w-fit px-3 mt-1 bg-blue-700 hover:bg-blue-800 text-white"
             >
               + Add Set
             </Button>
           </div>
-          <Input name="notes" placeholder="Notes (optional)" value={form.notes} onChange={handleInput} />
+          <Input 
+            name="notes" 
+            placeholder="Notes (optional)" 
+            value={form.notes} 
+            onChange={handleInput} 
+            className="bg-gray-800 text-white border-gray-600"
+          />
           <DialogFooter className="flex justify-end gap-2 mt-2">
             <DialogClose asChild>
-              <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+              <Button type="button" variant="secondary" onClick={onClose} className="bg-gray-700 hover:bg-gray-600 text-white">Cancel</Button>
             </DialogClose>
-            <Button type="submit" className="bg-primary text-white hover-scale">Add Workout</Button>
+            <Button type="submit" className="bg-blue-700 text-white hover:bg-blue-600 hover-scale">Add Workout</Button>
           </DialogFooter>
         </form>
       </DialogContent>
